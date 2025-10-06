@@ -11,7 +11,7 @@ build-backend = "setuptools.build_meta"  # If not defined, then legacy behavior 
 
 
 [project]
-name = "scicode"
+name = "scicode-core"
 dynamic = ["version",]
 description = "todo"
 readme = "README.md"
@@ -58,7 +58,7 @@ classifiers = [
 include-package-data = true
 
 [tool.setuptools.dynamic]
-version = {attr = "scicode.__version__"}
+version = {attr = "scicode_core.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
