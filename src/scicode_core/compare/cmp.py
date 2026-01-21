@@ -2,6 +2,10 @@ import numpy as np
 import scipy.sparse
 import sympy
 
+from scicode_core.utils.log import get_logger
+
+logger = get_logger("cmp")
+
 
 def are_dicts_close(dict1, dict2, atol=1e-8, rtol=1e-5):
     dict1 = process_symbol_in_dict(dict1)
@@ -68,7 +72,7 @@ def cmp_tuple_or_list(var1, var2):
                 if not np.allclose(v1, v2):
                     return False
             except ValueError as e:
-                print(e)
+                logger.warning(e)
                 if not v1 == v2:
                     return False
     return True

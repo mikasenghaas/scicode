@@ -117,13 +117,13 @@ def generate_google_response(
     try:
         return response.text
     except ValueError:
-        print(f"prompt:\n{prompt}")
+        logger.error(f"prompt:\n{prompt}")
         # If the response doesn't contain text, check if the prompt was blocked.
-        print(f"prompt feedback:\n{response.prompt_feedback}")
+        logger.error(f"prompt feedback:\n{response.prompt_feedback}")
         # Also check the finish reason to see if the response was blocked.
-        print(f"finish reason:\n{response.candidates[0].finish_reason.name}")
+        logger.error(f"finish reason:\n{response.candidates[0].finish_reason.name}")
         # If the finish reason was SAFETY, the safety ratings have more details.
-        print(f"safety rating:\n{response.candidates[0].safety_ratings}")
+        logger.error(f"safety rating:\n{response.candidates[0].safety_ratings}")
         raise ValueError("Generate response failed.")
 
 
@@ -159,7 +159,7 @@ def extract_python_script(response: str):
             else response.split("```")[1].split("```")[0]
         )
     else:
-        print("Fail to extract python code from specific format.")
+        logger.warning("Fail to extract python code from specific format.")
         python_script = response
     python_script = re.sub(
         r"^\s*(import .*|from .*\s+import\s+.*)", "", python_script, flags=re.MULTILINE

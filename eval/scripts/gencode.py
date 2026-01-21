@@ -7,6 +7,9 @@ from scicode_core.parse.parse import (
     get_function_from_code,
     read_from_hf_dataset,
 )
+from scicode_core.utils.log import get_logger
+
+logger = get_logger("gencode")
 
 DEFAULT_PROMPT_TEMPLATE = Path(
     "eval", "data", "background_comment_template.txt"
@@ -251,7 +254,7 @@ def main(
     for problem in data:
         prob_id = problem["problem_id"]
         steps = len(problem["sub_steps"])
-        print(f"Generating {prob_id}...")
+        logger.info(f"Generating {prob_id}...")
         for i in range(steps):
             if (
                 (prob_id == "13" and i == 5)

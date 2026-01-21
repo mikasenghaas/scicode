@@ -10,6 +10,10 @@ import numpy as np
 from sympy import Symbol
 from datasets import load_dataset
 
+from scicode_core.utils.log import get_logger
+
+logger = get_logger("parse")
+
 OrderedContent = list[tuple[str, str]]
 
 H5PY_FILE = "eval/data/test_data.h5"
@@ -47,7 +51,7 @@ def get_function_from_code(code_string, function_name):
                 # Convert the AST back to a string containing the Python code for the function
                 return ast.unparse(node)
     except Exception as e:
-        print(f'{function_name} not found with error: {e}')
+        logger.warning(f'{function_name} not found with error: {e}')
         return code_string
 
 def read_from_jsonl(file_path):
@@ -189,7 +193,7 @@ def save_data_to_hdf5(key, value, h5file):
                             np.bool_, np.int_, np.ndarray)):
         h5file.create_dataset(key, data=value)
     else:
-        print(type(value))
+        logger.debug(type(value))
         h5file.create_dataset(key, data=str(value))
 
 

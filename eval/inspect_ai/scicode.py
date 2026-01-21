@@ -12,6 +12,9 @@ from inspect_ai.solver import Generate, TaskState, solver
 
 from scicode_core.gen.models import extract_python_script, generate_dummy_response
 from scicode_core.parse.parse import extract_function_name, get_function_from_code
+from scicode_core.utils.log import get_logger
+
+logger = get_logger("scicode_inspect")
 
 BACKGOUND_PROMPT_TEMPLATE = Path("../data", "multistep_template.txt").read_text()
 DEFAULT_PROMPT_TEMPLATE = Path("../data", "background_comment_template.txt").read_text()
@@ -341,7 +344,7 @@ def scicode_solver(**params: dict[str, Any]):
                     response_from_llm = result.output.completion
                     # ===Model Generation===
                 except:
-                    print(
+                    logger.error(
                         f"Failed to generate response for problem {prob_id} step {idx + 1}."
                     )
                     response_from_llm = generate_dummy_response(prompt)

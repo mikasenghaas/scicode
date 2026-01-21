@@ -8,6 +8,9 @@ from pathlib import Path
 import numpy as np
 
 from scicode_core.parse.parse import H5PY_FILE, read_from_hf_dataset
+from scicode_core.utils.log import get_logger
+
+logger = get_logger("test_generated_code")
 
 PROB_NUM = 80
 DEV_PROB_NUM = 15
@@ -73,11 +76,11 @@ from scicode_core.parse.parse import process_hdf5_to_tuple
             )
             return 0
         except subprocess.CalledProcessError as e:
-            print(f"Error running script {script_path}: {e}")
-            print(e.output)
+            logger.error(f"Error running script {script_path}: {e}")
+            logger.error(e.output)
             return 1
         except subprocess.TimeoutExpired as e:
-            print(f"Runtime error while running script {script_path}: {e}")
+            logger.error(f"Runtime error while running script {script_path}: {e}")
             return 2
 
     correct_prob = np.zeros(PROB_NUM)
@@ -92,7 +95,7 @@ from scicode_core.parse.parse import process_hdf5_to_tuple
         if file_path.is_file():
             func_id = file_path.stem
             prob_id = func_id.split(".")[0]
-            print(f"Testing function {func_id} ...")
+            logger.info(f"Testing function {func_id} ...")
             tot_prob[int(prob_id) - 1] += 1
             logs_dir_ = Path(log_dir, model_name, _get_background_dir(with_background))
             logs_dir_.mkdir(parents=True, exist_ok=True)
@@ -127,10 +130,10 @@ from scicode_core.parse.parse import process_hdf5_to_tuple
         if correct_prob[i] == tot_prob[i] and tot_prob[i] != 0
     )
 
-    print(
+    logger.info(
         f"correct problems: {correct_prob_num}/{DEV_PROB_NUM if (split == 'validation') else PROB_NUM - DEV_PROB_NUM}"
     )
-    print(
+    logger.info(
         f"correct steps: {len(correct_step)}/{DEV_STEP_NUM if (split == 'validation') else STEP_NUM}"
     )
 
